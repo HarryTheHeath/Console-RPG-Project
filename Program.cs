@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Formats.Asn1;
 using System.Runtime.CompilerServices;
 
-namespace RPG
+namespace RPG_Dungeon_Crawler
 {
     class Program
     {
