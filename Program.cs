@@ -370,7 +370,10 @@ namespace RPG_Dungeon_Crawler
             
             
             //add new units
-            Unit hero = new Hero();
+            bool playerWantsToQuit = false;
+            while (playerWantsToQuit == false)
+            {
+                Unit hero = new Hero();
 
             while (hero.IsAlive == true)
             {
@@ -419,7 +422,6 @@ namespace RPG_Dungeon_Crawler
                                      ███    ███ 
 
 ");
-                    break;
                 }
 
                 else
@@ -448,21 +450,26 @@ namespace RPG_Dungeon_Crawler
                               ███    ███            
 
 ");
-                    break;
                 }
-                
-                
-            }
-            
-            Console.WriteLine(@" Made by:
+                Console.WriteLine(@" Made by:
 
  __    __ __    __ 
 |  |  |  |  |  |  | 
 |  |__|  |  |__|  | 
 |   __   |   __   | 
 |  |  |  |  |  |  | 
-|__|  |__|__|  |__| HH Games 2021");
-            
+|__|  |__|__|  |__| HH Games 2021
+
+");
+                
+                Console.WriteLine("Press 'Enter' to play again, else input 'Stop' to quit");
+                if (Console.ReadLine() == "stop")
+                {
+                    playerWantsToQuit = true;
+                }
+            }
+
+
             // Randomly spawn new units
             static Unit SpawnNewUnit()
             {
