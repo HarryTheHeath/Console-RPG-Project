@@ -375,32 +375,32 @@ namespace RPG_Dungeon_Crawler
             {
                 Unit hero = new Hero();
 
-            while (hero.IsAlive == true)
-            {
-                for (int i = 0; i < 3; i++)
+                while (hero.IsAlive == true)
                 {
-                    Unit unit = SpawnNewUnit();
-                    while (unit.IsAlive == true && hero.IsAlive == true)
+                    for (int i = 0; i < 3; i++)
                     {
-                        Console.WriteLine("The fight continues... (Press any key.)\n");
-                        Console.ReadKey();
-                        hero.Attack(unit);
-                        if (unit.IsAlive)
+                        Unit unit = SpawnNewUnit();
+                        while (unit.IsAlive == true && hero.IsAlive == true)
                         {
-                            unit.Attack(hero);     
+                            Console.WriteLine("The fight continues... (Press any key.)\n");
+                            Console.ReadKey();
+                            hero.Attack(unit);
+                            if (unit.IsAlive)
+                            {
+                                unit.Attack(hero);
+                            }
+                        }
+
+                        if (hero.IsAlive)
+                        {
+                            Console.WriteLine($"{unit.Name} was defeated!\n");
                         }
                     }
 
-                    if (hero.IsAlive)
+                    if (hero.IsDead == true)
                     {
-                        Console.WriteLine($"{unit.Name} was defeated!\n");
-                    }
-                }
-                
-                if (hero.IsDead == true)
-                {
-                    Console.WriteLine("The hero died! You Lose.");
-                    Console.WriteLine(@"
+                        Console.WriteLine("The hero died! You Lose.");
+                        Console.WriteLine(@"
 
    ▄██████▄     ▄████████   ▄▄▄▄███▄▄▄▄      ▄████████ 
   ███    ███   ███    ███ ▄██▀▀▀███▀▀▀██▄   ███    ███ 
@@ -422,13 +422,13 @@ namespace RPG_Dungeon_Crawler
                                      ███    ███ 
 
 ");
-                }
+                    }
 
-                else
-                {
-                    Console.WriteLine("All enemies were vanquished! You win! ");
-                    Console.ReadLine();
-                    Console.WriteLine(@"
+                    else
+                    {
+                        Console.WriteLine("All enemies were vanquished! You win! ");
+                        Console.ReadLine();
+                        Console.WriteLine(@"
 ▀█████████▄     ▄████████    ▄████████  ▄█    █▄   ▄██████▄  
   ███    ███   ███    ███   ███    ███ ███    ███ ███    ███ 
   ███    ███   ███    ███   ███    ███ ███    ███ ███    ███ 
@@ -450,8 +450,9 @@ namespace RPG_Dungeon_Crawler
                               ███    ███            
 
 ");
-                }
-                Console.WriteLine(@" Made by:
+                    }
+
+                    Console.WriteLine(@" Made by:
 
  __    __ __    __ 
 |  |  |  |  |  |  | 
@@ -461,23 +462,23 @@ namespace RPG_Dungeon_Crawler
 |__|  |__|__|  |__| HH Games 2021
 
 ");
-                
-                Console.WriteLine("Press 'Enter' to play again, else input 'Stop' to quit");
-                if (Console.ReadLine() == "stop")
-                {
-                    playerWantsToQuit = true;
+
+                    Console.WriteLine("Press 'Enter' to play again, else input 'Stop' to quit");
+                    if (Console.ReadLine() == "stop")
+                    {
+                        playerWantsToQuit = true;
+                    }
                 }
-            }
 
 
-            // Randomly spawn new units
-            static Unit SpawnNewUnit()
-            {
-                int random1 = random.Next(0, 6);
-                
-                if (random1 == 0)
+                // Randomly spawn new units
+                static Unit SpawnNewUnit()
                 {
-                    Console.WriteLine($@"A wild Necromancer has spawned!
+                    int random1 = random.Next(0, 6);
+
+                    if (random1 == 0)
+                    {
+                        Console.WriteLine($@"A wild Necromancer has spawned!
 
                  /\
                  ||
@@ -494,11 +495,11 @@ namespace RPG_Dungeon_Crawler
         |     |
         |_____|
         |_____|");
-                    return new Necromancer();
-                }
-                else if (random1 == 1)
-                {
-                    Console.WriteLine($@"A wild Skeleton has spawned!
+                        return new Necromancer();
+                    }
+                    else if (random1 == 1)
+                    {
+                        Console.WriteLine($@"A wild Skeleton has spawned!
 
       .-.
      (o.o)
@@ -514,12 +515,12 @@ namespace RPG_Dungeon_Crawler
      || ||
      || ||
     ==' '==");
-                    return new Skeleton();
-                }
+                        return new Skeleton();
+                    }
 
-                else if (random1 == 2)
-                {
-                    Console.WriteLine($@"A wild Bomb has spawned!
+                    else if (random1 == 2)
+                    {
+                        Console.WriteLine($@"A wild Bomb has spawned!
 
              . . .                         
               \|/                          
@@ -545,12 +546,12 @@ namespace RPG_Dungeon_Crawler
      `._###############_,'                 
         `--..#####..--'
 ");
-                    return new Bomb();
-                }
-                
-                else if (random1 == 3)
-                {
-                    Console.WriteLine($@"A wild Ghost has spawned!
+                        return new Bomb();
+                    }
+
+                    else if (random1 == 3)
+                    {
+                        Console.WriteLine($@"A wild Ghost has spawned!
 
      .-.
    .'   `.
@@ -565,12 +566,12 @@ namespace RPG_Dungeon_Crawler
        :              `.
         `.              `.     .
           `'`'`'`---..,___`;.-'");
-                    return new Ghost();
-                }
-                
-                else if (random1 == 4)
-                {
-                    Console.WriteLine($@"A wild Jackalope has spawned!
+                        return new Ghost();
+                    }
+
+                    else if (random1 == 4)
+                    {
+                        Console.WriteLine($@"A wild Jackalope has spawned!
 
                      /\    .-` /
                     /  ; .'  .' 
@@ -586,12 +587,12 @@ namespace RPG_Dungeon_Crawler
     \/  .__    ;    \   `-.     
      ;     '-,/_..--'`-..__)    
      '""--.._:");
-                    return new Jackalope();
-                }
-                
-                else
-                {
-                    Console.WriteLine($@"A wild Hedgehog has spawned!
+                        return new Jackalope();
+                    }
+
+                    else
+                    {
+                        Console.WriteLine($@"A wild Hedgehog has spawned!
 
              \ / \/ \/ / ,
            \ /  \/ \/  \/  / ,
@@ -603,7 +604,8 @@ namespace RPG_Dungeon_Crawler
 o'_ ',__ .'   ,.,.,.,.,.,.,.,'- '%
              // \\          // \\        
             ''  ''         ''  ''");
-                    return new Hedgehog();
+                        return new Hedgehog();
+                    }
                 }
             }
         }
