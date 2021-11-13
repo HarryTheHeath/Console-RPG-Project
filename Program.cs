@@ -8,6 +8,11 @@ namespace RPG_Dungeon_Crawler
     class Program
     {
 
+        static public bool GameOver = false;
+        static public int WinCount;
+        static public int LoseCount;
+        static public bool Reset = false;
+        
         // Weapon class
         abstract class Weapon
         {
@@ -64,13 +69,17 @@ namespace RPG_Dungeon_Crawler
 
             public Unit(string name, int maxHealth, Weapon weapon)
             {
+                if (GameOver == true)
+                {
+                    nextId = 0;
+                }
+                
                 this.name = name;
                 id = nextId;
                 nextId++;
                 health = maxHealth;
                 this.maxHealth = maxHealth;
                 Weapon = weapon;
-
                 ReportStatus();
             }
 
@@ -79,6 +88,8 @@ namespace RPG_Dungeon_Crawler
             public int id;
             private static int nextId;
             private Weapon Weapon;
+
+            
 
 
             // Attack method
@@ -91,7 +102,7 @@ namespace RPG_Dungeon_Crawler
             // Life and death logic
             ~Unit()
             {
-                Console.WriteLine($"Unit #{id} {name} got destroyed");
+                Console.WriteLine($"Unit #{id} {name} was vanquished!");
             }
 
             public string Name => name;
@@ -154,21 +165,53 @@ namespace RPG_Dungeon_Crawler
 
             public void ReportStatus()
             {
-                Console.WriteLine($"Unit #{id}: {name} - {health}/{maxHealth} Health");
+                if (Reset == false)
+                {
+                    Console.WriteLine($"Unit #{id}: {name} - {health}/{maxHealth} Health");
+                }
             }
         }
         
         // Hero Unit
         class Hero : Unit
         {
-            public Hero() : base("Hero", 1000, new TrainingWeapon()) { }
+            public Hero() : base("Hero", 1000, new TrainingWeapon())
+            {
+                Console.WriteLine(@"
+      _,.
+    ,` -.)
+   ( _/-\\-._
+  /,|`--._,-^|            ,
+  \_| |`-._/||          ,'|
+    |  `-, / |         /  /
+    |     || |        /  /
+     `r-._||/   __   /  /
+ __,-<_     )`-/  `./  /
+'  \   `---'   \   /  /
+    |           |./  /
+    /           //  /
+\_/' \         |/  /
+ |    |   _,^-'/  /
+ |    , ``  (\/  /_
+  \,.->._    \X-=/^
+  (  /   `-._//^`
+   `Y-.____(__}
+    |     {__)
+          ()");
+                Console.WriteLine();
+                Console.WriteLine(@"You enter the dungeon clad in armour.
+Though it is murky, you sense something waiting up ahead.
+Alas, bursting from the shadows, something sinister springs towards you...");
+                Console.ReadLine();
+                Console.WriteLine();
+            }
 
             public override void Attack(Unit target)
             {
                 if (target is Skeleton)
                 {
                     base.Attack(target);
-                    Console.WriteLine($"The Hero deals 10 extra Damage against the {target.Name}'s weak Bones!");
+                    Console.WriteLine($"The Hero deals 10 extra Damage against the {target.Name}'s weak Bones!\n");
                     target.TakeDamage(+10);
                     Console.WriteLine();
                 }
@@ -179,7 +222,7 @@ namespace RPG_Dungeon_Crawler
 
                     if (random2 < 55)
                     {
-                        Console.WriteLine("The Hero is too scared to attack!");
+                        Console.WriteLine("The Hero is too scared to attack!\n");
                     }
                     else
                     {
@@ -217,6 +260,7 @@ namespace RPG_Dungeon_Crawler
                 if (random3 < 3)
                 {
                     Console.WriteLine("The fearsome Jackalope landed a critical hit!");
+                    Console.ReadLine();
                     target.TakeDamage(+100);
                 }
 
@@ -249,7 +293,7 @@ namespace RPG_Dungeon_Crawler
                     base.TakeDamage(value);
                     if (this.IsAlive)
                     {
-                        Console.WriteLine($"{Name} will explode in {(6-BombRounds)} rounds!\n");
+                        Console.WriteLine($"{Name} will explode in {(6-BombRounds)} rounds!");
                     }
                 }
                 else 
@@ -264,7 +308,8 @@ namespace RPG_Dungeon_Crawler
             {
                 if (Explosion == true)
                 {
-                    Console.WriteLine("The explosion hurts the hero!");
+                    Console.WriteLine("The explosion hurts the hero!\n");
+                    Console.ReadLine();
                     target.TakeDamage(+500);
                     Health = 0;
                     Explosion = false;
@@ -294,13 +339,13 @@ namespace RPG_Dungeon_Crawler
                 {
                     isDefenseMode = false;
                     DefenseModeRounds = 0;
-                    Console.WriteLine($"{Name} stopped being in Defense Mode!");
+                    Console.WriteLine($"{Name} stopped being in Defense Mode!\n");
                 }
 
                 if ((DefenseModeRounds < 2) && (isDefenseMode) && (this.IsAlive))
                 {
                     DefenseModeRounds++;
-                    Console.WriteLine($"{Name} went into Defense Mode!");
+                    Console.WriteLine($"{Name} went into Defense Mode!\n");
                 }
 
             }
@@ -331,7 +376,24 @@ namespace RPG_Dungeon_Crawler
                 {
                     hasResurrected = true;
                     Health = MaxHealth / 2;
-                    Console.WriteLine($"Necromancer has resurrected.\n");
+                    Console.WriteLine($@"Necromancer has resurrected itself!
+                 /\
+                 ||
+   ____ (((+))) _||_
+  /.--.\  .-.  /.||.\
+ /.,   \\(0.0)// || \\
+/;`';/\ \\|m|//  ||  ;\
+|:   \ \__`:`____||__:|
+|:    \__ \T/ (@~)(~@)|
+|:    _/|     |\_\/  :|
+|:   /  |     |  \   :|
+|'  /   |     |   \  '|
+ \_/    |     |    \_/
+        |     |
+        |_____|
+        |_____|
+");
+                    Console.ReadLine();
                     ReportStatus();
                 }
             }
@@ -341,6 +403,7 @@ namespace RPG_Dungeon_Crawler
         // random logic
         private static readonly Random random = new Random();
         
+        // Main Program
         static void Main(string[] args)
         {
             Console.WriteLine(@"
@@ -365,28 +428,37 @@ namespace RPG_Dungeon_Crawler
 
  
                                                                                ");
+            Console.ReadLine();
             Console.WriteLine("Fight your way through a dungeon of monsters to the end!");
             Console.WriteLine("Press 'Enter' when ready to play.\n");
+            Console.ReadLine();
             
-            
-            //add new units
             bool playerWantsToQuit = false;
+            
+            // keep playing until player wants to quit
             while (playerWantsToQuit == false)
             {
+                // new hero and replay logic
+                Reset = false;
                 Unit hero = new Hero();
+                GameOver = false;
 
                 while (hero.IsAlive == true)
                 {
                     for (int i = 0; i < 3; i++)
                     {
+                       //add new units
                         Unit unit = SpawnNewUnit();
                         while (unit.IsAlive == true && hero.IsAlive == true)
                         {
+                            Console.WriteLine();
                             Console.WriteLine("The fight continues... (Press any key.)\n");
                             Console.ReadKey();
                             hero.Attack(unit);
                             if (unit.IsAlive)
                             {
+                                Console.ReadLine();
+                                Console.WriteLine();
                                 unit.Attack(hero);
                             }
                         }
@@ -394,11 +466,14 @@ namespace RPG_Dungeon_Crawler
                         if (hero.IsAlive)
                         {
                             Console.WriteLine($"{unit.Name} was defeated!\n");
+                            Console.ReadLine();
                         }
                     }
 
                     if (hero.IsDead == true)
                     {
+                        LoseCount++;
+                        Console.ReadLine();
                         Console.WriteLine("The hero died! You Lose.");
                         Console.WriteLine(@"
 
@@ -426,6 +501,8 @@ namespace RPG_Dungeon_Crawler
 
                     else
                     {
+                        WinCount++;
+                        Console.ReadLine();
                         Console.WriteLine("All enemies were vanquished! You win! ");
                         Console.ReadLine();
                         Console.WriteLine(@"
@@ -451,7 +528,12 @@ namespace RPG_Dungeon_Crawler
 
 ");
                     }
-
+                    
+                    // Credits
+                    Console.ReadLine();
+                    GameOver = true;
+                    Reset = true;
+                    hero.Health = 0;
                     Console.WriteLine(@" Made by:
 
  __    __ __    __ 
@@ -463,7 +545,12 @@ namespace RPG_Dungeon_Crawler
 
 ");
 
-                    Console.WriteLine("Press 'Enter' to play again, else input 'Stop' to quit");
+                    // Play Again or Quit Option
+                    Console.ReadLine();
+                    Console.WriteLine($"Win Count: {WinCount}");
+                    Console.WriteLine($"Lose Count: {LoseCount}");
+                    Console.WriteLine();
+                    Console.WriteLine("Press 'Enter' to play again, else input 'stop' to quit");
                     if (Console.ReadLine() == "stop")
                     {
                         playerWantsToQuit = true;
@@ -494,11 +581,13 @@ namespace RPG_Dungeon_Crawler
  \_/    |     |    \_/
         |     |
         |_____|
-        |_____|");
+        |_____|
+");
                         return new Necromancer();
                     }
                     else if (random1 == 1)
                     {
+                        
                         Console.WriteLine($@"A wild Skeleton has spawned!
 
       .-.
@@ -514,7 +603,8 @@ namespace RPG_Dungeon_Crawler
      () ()
      || ||
      || ||
-    ==' '==");
+    ==' '==
+");
                         return new Skeleton();
                     }
 
@@ -565,7 +655,8 @@ namespace RPG_Dungeon_Crawler
     `:;             `:'
        :              `.
         `.              `.     .
-          `'`'`'`---..,___`;.-'");
+          `'`'`'`---..,___`;.-'
+");
                         return new Ghost();
                     }
 
@@ -586,7 +677,8 @@ namespace RPG_Dungeon_Crawler
 '._:           ;   :   (        
     \/  .__    ;    \   `-.     
      ;     '-,/_..--'`-..__)    
-     '""--.._:");
+     '""--.._:
+");
                         return new Jackalope();
                     }
 
@@ -603,7 +695,8 @@ namespace RPG_Dungeon_Crawler
   /   o    ) \/ \/ \/ \/ \/ \/ \// /
 o'_ ',__ .'   ,.,.,.,.,.,.,.,'- '%
              // \\          // \\        
-            ''  ''         ''  ''");
+            ''  ''         ''  ''
+");
                         return new Hedgehog();
                     }
                 }
