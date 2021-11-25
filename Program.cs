@@ -102,7 +102,10 @@ namespace RPG_Dungeon_Crawler
             // Life and death logic
             ~Unit()
             {
-                Console.WriteLine($"Unit #{id} {name} was vanquished!");
+                if (GameOver != true)
+                {
+                    Console.WriteLine($"Unit #{id} {name} was vanquished!");
+                }
             }
 
             public string Name => name;
