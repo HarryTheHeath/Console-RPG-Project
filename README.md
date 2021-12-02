@@ -44,7 +44,7 @@ Playing as a knight, in this small game you vanquish nightmarish foes in classic
 4. Enjoy!
 
 ```
-__    __ __    __ 
+ __    __ __    __ 
 |  |  |  |  |  |  | 
 |  |__|  |  |__|  | 
 |   __   |   __   | 
